@@ -1,60 +1,48 @@
 SYS_WRITE equ 4
 SYS_EXIT equ 1
 STDOUT equ 1
-STDIN equ 0
+SAFE_EXIT equ 0
 
 section .data
-    msgGreater db "valA is greater than valB", 0xA  ; Message when valA > valB
-    msgGreaterLen equ $ - msgGreater                ; Length of the message
+    msg db "good Job!!!", 0xA  ; Message to print
+    msgLen equ $ - msg          ; Length of the message
 
-    msgLess db "valA is less than valB", 0xA       ; Message when valA < valB
-    msgLessLen equ $ - msgLess                      ; Length of the message
-
-    msgEqual db "valA is equal to valB", 0xA       ; Message when valA == valB
-    msgEqualLen equ $ - msgEqual                    ; Length of the message
+section .bss
+    x resb 4   ; Reserve space for x
+    y resb 4   ; Reserve space for y
 
 section .text
     global _start
 
 _start:
-    ; Initialize valA and valB
-    mov eax, 10        ; valA = 10
-    mov ebx, 15        ; valB = 15
+    ; Initialize x = 1 and y = 10
+    mov dword [x], 1         ; x = 1
+    mov dword [y], 10        ; y = 10
 
-    ; Compare valA and valB
-    cmp eax, ebx       ; Compare valA with valB
-    je equal_case      ; If valA == valB, jump to equal_case
-    ja greater_case    ; If valA > valB, jump to greater_case
-    jb less_case       ; If valA < valB, jump to less_case
+while_loop:
+    ; Compare if x <= y
+    mov eax, [x]             ; Load x into eax
+    mov ebx, [y]             ; Load y into ebx
+    cmp eax, ebx             ; Compare x with y
+    jg exit_program          ; If x > y, exit the loop
 
-equal_case:
-    ; Print "valA is equal to valB"
-    mov eax, SYS_WRITE
-    mov ebx, STDOUT
-    mov ecx, msgEqual
-    mov edx, msgEqualLen
-    int 0x80
-    jmp exit_program
+    ; Print the message "good Job!!!"
+    mov eax, SYS_WRITE       ; syscall number for SYS_WRITE
+    mov ebx, STDOUT          ; file descriptor 1 (stdout)
+    mov ecx, msg             ; address of the message
+    mov edx, msgLen          ; length of the message
+    int 0x80                 ; invoke syscall
 
-greater_case:
-    ; Print "valA is greater than valB"
-    mov eax, SYS_WRITE
-    mov ebx, STDOUT
-    mov ecx, msgGreater
-    mov edx, msgGreaterLen
-    int 0x80
-    jmp exit_program
+    ; Increment x by 1
+    mov eax, [x]             ; Load x into eax
+    add eax, 1               ; Increment x by 1
+    mov [x], eax             ; Store the new value of x back into memory
 
-less_case:
-    ; Print "valA is less than valB"
-    mov eax, SYS_WRITE
-    mov ebx, STDOUT
-    mov ecx, msgLess
-    mov edx, msgLessLen
-    int 0x80
+    ; Repeat the loop
+    jmp while_loop
 
 exit_program:
     ; Exit the program
-    mov eax, SYS_EXIT
-    xor ebx, ebx       ; Return code 0
-    int 0x80           ; Invoke the system call to exit
+    mov eax, SYS_EXIT        ; syscall number for exit
+    xor ebx, ebx             ; return code 0
+    int 0x80                 ; invoke syscall
