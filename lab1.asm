@@ -2,18 +2,24 @@ section .data
     hellomsg db "Hello World From Assembly", 0xa
     msglength equ $ - hellomsg
 
+section .bss
+    varMsg resb 4
+    varLen resb 4
+
 section .text
     global _start
 
+    printString:
+        mov eax, SYS_WRITE
+        mov ebx, STDOUT
+        mov ecx, [varMsg]
+        mov edx, [varLen]
+        int 0x80 
+    ret
+
 _start:
     
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, hellomsg
-    mov edx, msglength
-    int 0x80 
+    mov [varMsg], DWORD hellomsg
+    mov [varLen], DWORD msglength
 
-    ;Exit program
-    mov eax, 1
-    mov ebx, 0
-    int 0x80
+    call printString
