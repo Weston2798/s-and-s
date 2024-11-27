@@ -1,3 +1,8 @@
+SYS_WRITE equ 4
+SYS_EXIT equ 1
+STDOUT equ 1
+SAFE_EXIT equ 0
+
 section .data
     hellomsg db "Hello World From Assembly", 0xa
     msglength equ $ - hellomsg
