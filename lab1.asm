@@ -13,6 +13,8 @@ section .data
 section .bss
     userInput resb maxInputLen
     inputLen resb 4
+    varMsg resb 4
+    varLen resb 4 
 
 section .text
     global _start
