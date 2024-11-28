@@ -8,10 +8,12 @@ void vulnerable_function(char *input) {
      }
 
 int main(int argc, char *argv[]) {
+    char pipeArg[128];
+
          if (argc > 1) {
              vulnerable_function(argv[1]);
          }
-        else if (fgets(arg, sizeof(arg), stdin) != NULL){
+        else if (fgets(pipeArg, sizeof(pipeArg), stdin) != NULL){
             vulnerable_function(arg);
          } else  {
              printf("Usage: %s <input>\n", argv[0]);
