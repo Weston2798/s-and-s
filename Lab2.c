@@ -2,7 +2,7 @@
  #include <string.h>
 
 void vulnerable_function(char *input) {
-         char buffer[64];
+         char buffer[128];
          printf(input);
          strcpy(buffer, input);
      }
