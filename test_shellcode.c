@@ -6,8 +6,7 @@ unsigned char shellcode[] =
 
 int main() {
     printf("Shellcode Length:  %d\n", (int)strlen(shellcode));
-    printf("print:  %s\n", shellcode);
 
-    int (*ret)() = (int(*)())shellcode;
+    int (ret)() = (int(*)())shellcode;
     ret();
 }
