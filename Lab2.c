@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
              vulnerable_function(argv[1]);
          }
         else if (fgets(pipeArg, sizeof(pipeArg), stdin) != NULL){
-            vulnerable_function(arg);
+            vulnerable_function(pipeArg);
          } else  {
              printf("Usage: %s <input>\n", argv[0]);
          }
