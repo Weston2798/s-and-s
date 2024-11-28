@@ -3,7 +3,7 @@
 
 void vulnerable_function(char *input) {
          char buffer[64];
-         printf(input)
+         printf(input);
          strcpy(buffer, input);
      }
 
